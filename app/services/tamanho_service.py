@@ -6,10 +6,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
 
-def preprocess_tamanho(dataframe):
+def preprocess_dataframe(dataframe):
     # Pré-processar os dados existentes
     dataframe['nome_produto'] = dataframe['nome_produto'].apply(
-        lambda x: re.sub(r'\s', ' ', x.lower()))
+        lambda x: re.sub(r'\s', ' ', str(x).lower()))
     dataframe['nome_produto'] = dataframe['nome_produto'].apply(lambda x: ' '.join(
         word for word in x.split() if any(c.isdigit() for c in word) and len(re.findall(r'\d', word)) <= 4))
     dataframe['nome_produto'] = dataframe['nome_produto'].apply(
@@ -30,7 +30,7 @@ def preprocess_tamanho(dataframe):
     return dataframe
 
 
-def train_test_tamanho(dataframe_existing):
+def train_test_tamanho(dataframe_tamanho):
 
     from nltk.corpus import stopwords
 
@@ -45,7 +45,8 @@ def train_test_tamanho(dataframe_existing):
     stopwords = stopwords.words('portuguese') + custom_words
     vectorizer = TfidfVectorizer(stop_words=stopwords)
 
-    preprocess_dataframe_existing = preprocess_tamanho(dataframe_existing)
+    preprocess_dataframe_existing = preprocess_dataframe(
+        dataframe_tamanho)
 
     X = vectorizer.fit_transform(
         preprocess_dataframe_existing['nome_produto'])
@@ -72,22 +73,6 @@ def train_test_tamanho(dataframe_existing):
 
 
 def process_tamanho(dataframe_new, vectorizer, random_forest):
- #   # Pré-processar os novos produtos
- #   dataframe_new['nome_produto_preprocessado'] = dataframe_new['nome_produto'].apply(
- #       lambda x: re.sub(r'\s', ' ', x.lower()))
- #   dataframe_new['nome_produto_preprocessado'] = dataframe_new['nome_produto_preprocessado'].apply(
- #       lambda x: ' '.join(word for word in x.split() if any(c.isdigit() for c in word) and len(
- #           re.findall(r'\d', word)) <= 4))
- #   dataframe_new['nome_produto_preprocessado'] = dataframe_new['nome_produto_preprocessado'].apply(
- #       lambda x: re.sub(r'(\d+)', r' \1 ', x))
- #   dataframe_new['nome_produto_preprocessado'] = dataframe_new['nome_produto_preprocessado'].apply(
- #       lambda x: re.sub(r'\b(?![\d\s])\w{4,}\b', '', x))
- #   dataframe_new['nome_produto_preprocessado'] = dataframe_new['nome_produto_preprocessado'].apply(
- #       lambda x: ''.join(x.split()))
-    #
- #    Atualizar a coluna 'tamanho_medida' com valores vazios se 'nome_produto' estiver vazio
-    # dataframe_new.loc[dataframe_new['nome_produto']
-    #                  == '', 'tamanho_medida'] = ''
 
     # Prever o tamanho dos novos produtos
     X_new = vectorizer.transform(

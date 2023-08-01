@@ -1,3 +1,5 @@
+import re
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -6,8 +8,8 @@ from sklearn.ensemble import RandomForestClassifier
 def train_test_setor_gerenciado(dataframe_existing):
     vectorizer = TfidfVectorizer()
 
-    # Preencher valores NaN com string vazia
-    dataframe_existing['setor_gerenciado'].fillna('', inplace=True)
+    # Excluindo as linhas que não possuem valor para o teste:
+    dataframe_existing.dropna(subset=['setor_gerenciado'], inplace=True)
 
     # MARCA PARA MARCA_VAREJISTA
     X = vectorizer.fit_transform(dataframe_existing['nome_produto'])

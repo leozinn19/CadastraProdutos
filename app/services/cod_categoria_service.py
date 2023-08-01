@@ -1,15 +1,25 @@
+import nltk
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
 
 def train_test_cod_categoria(dataframe_existing):
-    vectorizer = TfidfVectorizer()
+    from nltk.corpus import stopwords
+
+    custom_words = [
+        'com', 'isca', 'roupa', 'perfumado', 'geral', 'click', 'vidros', 'brilho', 'agua', 'dt', 'tratamento',
+        'palha', 'maquina', 'liq', 'lixo'
+    ]
+
+    stopwords = stopwords.words('portuguese') + custom_words
+    vectorizer = TfidfVectorizer(stop_words=stopwords)
 
     # Excluindo as linhas que não possuem valor para o teste:
     dataframe_existing.dropna(subset=['cod_categoria'], inplace=True)
 
-    # MARCA PARA MARCA_VAREJISTA
+    # SEGMENTO PARA COD_CATEGORIA
     X = vectorizer.fit_transform(dataframe_existing['segmento'])
     y = dataframe_existing['cod_categoria']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,

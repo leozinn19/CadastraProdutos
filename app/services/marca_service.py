@@ -15,7 +15,7 @@ def train_test_marca(dataframe_existing):
     random_forest.fit(X_train, y_train)
     accuracy = random_forest.score(X_test, y_test)
 
-    return vectorizer, random_forest, accuracy;
+    return vectorizer, random_forest, accuracy
 
 
 def process_marca(dataframe_new, vectorizer, random_forest):
@@ -26,5 +26,8 @@ def process_marca(dataframe_new, vectorizer, random_forest):
 
     # Atualizar coluna 'marca_verejista'
     dataframe_new['marca_verejista'] = predict
+    dataframe_new['marca_res'] = dataframe_new['marca']
+    dataframe_new['marca_detalhada'] = dataframe_new['marca'] + \
+        ' ' + dataframe_new['segmento']
 
     return dataframe_new
