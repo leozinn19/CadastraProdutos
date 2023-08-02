@@ -11,7 +11,7 @@ def preprocess_dataframe(dataframe):
     dataframe['nome_produto'] = dataframe['nome_produto'].apply(
         lambda x: re.sub(r'\s', ' ', str(x).lower()))
     dataframe['nome_produto'] = dataframe['nome_produto'].apply(lambda x: ' '.join(
-        word for word in x.split() if any(c.isdigit() for c in word) and len(re.findall(r'\d', word)) <= 4))
+        word for word in x.split() if any(c.isdigit() for c in word) and len(re.findall(r'\d', word)) <= 3))
     dataframe['nome_produto'] = dataframe['nome_produto'].apply(
         lambda x: re.sub(r'(\d+)', r' \1 ', x))
     dataframe['nome_produto'] = dataframe['nome_produto'].apply(
@@ -51,10 +51,6 @@ def train_test_tamanho(dataframe_tamanho):
     X = vectorizer.fit_transform(
         preprocess_dataframe_existing['nome_produto'])
     y = preprocess_dataframe_existing['tamanho_medida']
-
-    # Dividir os dados em conjuntos de treinamento e teste
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42)
 
     # Dividir os dados em conjuntos de treinamento e teste
     X_train, X_test, y_train, y_test = train_test_split(

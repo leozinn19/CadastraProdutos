@@ -1,8 +1,8 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-
-from wordcloud import WordCloud
-from termcolor import colored
+#import matplotlib.pyplot as plt
+#
+#from wordcloud import WordCloud
+#from termcolor import colored
 from services.data_service import save_updated_dataframe, acurracy, xlsx_to_csv
 from services.tamanho_service import train_test_tamanho, process_tamanho
 from services.tamanho_range_service import train_test_tamanho_range, process_tamanho_range
@@ -92,7 +92,6 @@ xlsx_to_csv('../bases/NOVOS_PRODUTOS.xlsx',
 # Ler os novos produtos a serem adicionados
 dataframe_new = pd.read_csv('../bases/NOVOS_PRODUTOS_CONVERTIDOS.csv')
 
-dataframe_segmento, dataframe_sub_segmento = dataframe_new, dataframe_new
 
 # Processar os novos produtos
 processed_dataframe_new = process_segmento(
