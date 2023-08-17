@@ -6,6 +6,13 @@ from sklearn.ensemble import RandomForestClassifier
 def train_test_fabricante_varejista(dataframe_existing):
     vectorizer = TfidfVectorizer()
 
+    # Converter valores da coluna 'fabricante_varejista' em strings
+    dataframe_existing['fabricante'] = dataframe_existing['fabricante'].astype(
+        str)
+
+    # Excluindo as linhas que não possuem valor para o teste:
+    dataframe_existing.dropna(subset=['fabricante_varejista'], inplace=True)
+
     # FABRICANTE PARA FABRICANTE_VAREJISTA
     X = vectorizer.fit_transform(dataframe_existing['fabricante'])
     y = dataframe_existing['fabricante_varejista']

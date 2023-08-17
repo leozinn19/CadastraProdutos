@@ -6,6 +6,9 @@ from sklearn.ensemble import RandomForestClassifier
 def train_test_fabricante(dataframe_existing):
     vectorizer = TfidfVectorizer()
 
+    # Remover amostras com valores NaN na coluna 'tamanho_medida'
+    dataframe_existing = dataframe_existing.dropna(subset=['fabricante'])
+
     # MARCA PARA FABRICANTE
     X = vectorizer.fit_transform(dataframe_existing['marca'])
     y = dataframe_existing['fabricante']

@@ -7,7 +7,7 @@ def xlsx_to_csv(xlsx_file, csv_file):
 
 
 def acurracy(column, accuracy):
-    print('Acurácia do classificador RandomForest ' + column + ' :',
+    print('Acurácia do classificador ' + column + ' :',
           colored(accuracy, attrs=['underline']))
 
 
