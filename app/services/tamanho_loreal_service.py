@@ -22,24 +22,25 @@ def preprocess_dataframe(dataframe):
         lambda x: ''.join(x.split()))
 
     # Atualizar a coluna 'tamanho_medida' com valores vazios se 'nome_produto' estiver vazio
-    dataframe.loc[dataframe['nome_produto'] == '', 'tamanho_medida'] = ''
+    dataframe.loc[dataframe['nome_produto'] == '', 'tamanho_unidade'] = ''
 
-    # Remover amostras com valores NaN na coluna 'tamanho_medida'
-    dataframe = dataframe.dropna(subset=['tamanho_medida'])
+    # Remover amostras com valores NaN na coluna 'tamanho_unidade'
+    dataframe = dataframe.dropna(subset=['tamanho_unidade'])
 
     return dataframe
 
 
 def train_test_tamanho_loreal(dataframe_tamanho):
 
-    vectorizer = TfidfVectorizer()
+    vectorizer = TfidfVectorizer(min_df=1, max_df=0.95)
 
-    preprocess_dataframe_existing = preprocess_dataframe(
-        dataframe_tamanho)
+    dataframe_tamanho = dataframe_tamanho[dataframe_tamanho['tamanho_unidade'] != 'unknown']
+
+    dataframe_tamanho = dataframe_tamanho.dropna(subset=['tamanho_unidade'])
 
     X = vectorizer.fit_transform(
-        preprocess_dataframe_existing['nome_produto'])
-    y = preprocess_dataframe_existing['tamanho_unidade']
+        dataframe_tamanho['nome_produto'])
+    y = dataframe_tamanho['tamanho_unidade']
 
     # Dividir os dados em conjuntos de treinamento e teste
     X_train, X_test, y_train, y_test = train_test_split(
