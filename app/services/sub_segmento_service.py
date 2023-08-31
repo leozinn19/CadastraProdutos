@@ -23,23 +23,21 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 def train_test_sub_segmento(dataframe_existing):
-    custom_words = ['promocao', 'versao',  'nao', 'marca', 'cif',
-                    'fabricante', 'musculo', 'total', 'brilhante',
-                    'bufalo', 'rb', 'ingleza', 'veja', 'cp', 'unilever',
-                    'johnson', 'bombril', 'promocional', 'azul', 'zupp',
-                    'uau', 'ype', 'brasil', 'glade', 'triex', 'ajax',
-                    'perfume', 'vidro', 'vanish']
 
-    stopwords = nltk.corpus.stopwords.words('portuguese') + custom_words
-    vectorizer = TfidfVectorizer(stop_words=stopwords)
-    
+    vectorizer = TfidfVectorizer()
+
     # Preencher valores NaN com string vazia
-    dataframe_existing['sub_segmento'].fillna('', inplace=True)
+    # dataframe_existing['sub_segmento'].fillna('', inplace=True)
 
-    # preprocess_dataframe_existing = preprocess_sub_segmento(dataframe_existing)
+    # Filtrar linhas com marca_detalhada igual a '-'
+    # dataframe_existing = dataframe_existing[dataframe_existing['sub_segmento'] != '-']
+
+    # Concatenar informações de 'nome_produto' e outra coluna (por exemplo, 'outra_coluna')
+    dataframe_existing['combined_info'] = dataframe_existing['nome_produto'] + \
+        ' ' + dataframe_existing['segmento']
 
     # NOME PARA SUB_SEGMENTO
-    X = vectorizer.fit_transform(dataframe_existing['nome_produto'])
+    X = vectorizer.fit_transform(dataframe_existing['combined_info'])
     y = dataframe_existing['sub_segmento']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,
                                                         random_state=42)
@@ -47,7 +45,7 @@ def train_test_sub_segmento(dataframe_existing):
     random_forest.fit(X_train, y_train)
     accuracy = random_forest.score(X_test, y_test)
 
-    return vectorizer, random_forest, accuracy
+    return vectorizer, random_forest, accuracy, X
 
 
 def process_sub_segmento(dataframe_new, vectorizer, random_forest):
